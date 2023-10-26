@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Open+Sans&display=swap');
+
+@import './components/variables.scss';
+@import './components/header.scss';
+@import './components/slider.scss';
+
+/*------------------------------------------------------*/
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+    box-sizing: border-box;
+}
+
+body * {
+    box-sizing: border-box;
+}
+
+button, .promo-stiker {
+    cursor: pointer;
+}
+
+.container {
+    max-width: 1120px;
+    margin: 0 auto;
+    position: relative;
+}
+

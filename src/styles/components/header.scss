@@ -1,0 +1,57 @@
+@import 'variables';
+
+header {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background-color: white;
+}
+
+.header__content {
+    height: 116px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header__logo {
+    text-decoration: none;
+    color: $base-black;
+    font-size: 30px;
+    cursor: pointer;
+	font-weight: 700;
+    line-height: 30px;
+}
+
+.nav {
+    display: flex;
+    gap: 40px;
+    list-style-type: none;
+    text-transform: uppercase;
+    
+    &__link {
+        text-decoration: none;
+        color: $base-gray;
+        font-size: 15px;
+        font-weight: 700;
+    
+        &:hover {
+            cursor: pointer;
+            color: $base-black;
+        }   
+    }
+}
+
+.header-buttons {
+    display: flex;
+    gap: 25px;
+    border: hidden;
+    background: none;
+    
+    &__svg {
+        fill: $base-black;
+        width: 15px;
+        height: 17px;
+    }
+}
