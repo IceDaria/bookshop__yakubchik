@@ -4,6 +4,12 @@
 	position: relative;
     width: 1120px;
     height: 702px;
+
+    @media screen and (max-width: 425px) {
+        width: 100%;
+        height: 351px;
+
+    }
 }
 
 .image {
@@ -42,18 +48,11 @@
     display: flex;
     justify-content: flex-end;
     margin-top: -650px;
+    margin-bottom: 200px;
     position: relative;
     z-index: 1;
 }
 
-@mixin promo-stiker {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    gap: 5px;
-    padding: 15px 15px;
-    box-shadow: 0px 24px 36px 0px rgba(53, 49, 84, 0.28);
-}
 
 .sticker__first {
     @include promo-stiker();
@@ -63,6 +62,10 @@
     width: 149px;
     height: 204px;
     background-color: #9e98dc;
+    
+    @media screen and (max-width: 425px) {
+        display: none;
+    }
 }
 
 .sticker__second {
@@ -71,10 +74,16 @@
     width: 137px;
     height: 273px;
     background-color: #ff8fe6;
+
+    @media screen and (max-width: 425px) {
+        display: none;
+    }
 }
 
 .sticker__text {
     text-transform: uppercase;
+    text-decoration: none;
+    color: $base-black;
     font-weight: 700;
     font-size: 18px;
 }

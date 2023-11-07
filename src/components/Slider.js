@@ -1,3 +1,4 @@
+// создаём массив с картинками для слайдера
 let images = [
     {
         url: 'images/banner.png'
@@ -15,6 +16,7 @@ export class Slider {
         this.images = images;
         this.currentSlide = 0;
         this.intervalId = null;
+        this.autoSlideDelay = 55000; // задерка вопроизведения автопрокрутки после нажатия на точку
     }
 
     initSlider() {
@@ -37,6 +39,7 @@ export class Slider {
         });
     }
 
+    // код для точек под слайдером
     initDots(sliderDots) {
         this.images.forEach((image, index) => {
             let dot = `<div class="dot n${index} ${index === 0 ? "active" : ""}" data-index="${index}"></div>`;
@@ -51,6 +54,7 @@ export class Slider {
         });
     }
 
+    //логика прокрутки слайдов
     moveSlider(num) {
         const sliderImages = document.querySelector('.slider__images');
         const sliderDots = document.querySelector('.slider__dots');
@@ -64,20 +68,25 @@ export class Slider {
         this.currentSlide = parseInt(num);
     }
 
+    // добавляем автопрокрутку
     autoSlide() {
         this.currentSlide = (this.currentSlide + 1) % this.images.length;
         this.moveSlider(this.currentSlide);
     }
 
+    // устанавливаем интервал автопрокрутки на 5 секунд
     startAutoSlide() {
         this.intervalId = setInterval(() => {
             this.autoSlide();
         }, 5000);
     }
 
+    // рестарт автопрокрутки после нажатия на точку
     restartAutoSlide() {
         clearInterval(this.intervalId);
-        this.startAutoSlide();
+        setTimeout(() => {
+            this.startAutoSlide();
+        }, this.autoSlideDelay);
     }
 }
 

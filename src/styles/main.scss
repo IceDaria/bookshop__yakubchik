@@ -3,6 +3,8 @@
 @import './components/variables.scss';
 @import './components/header.scss';
 @import './components/slider.scss';
+@import './components/books.scss';
+@import './components/burger-menu.scss';
 
 /*------------------------------------------------------*/
 html, body {
@@ -16,7 +18,7 @@ body * {
     box-sizing: border-box;
 }
 
-button, .promo-stiker {
+button, .sticker__first, .sticker__second, .book-card {
     cursor: pointer;
 }
 
@@ -24,5 +26,31 @@ button, .promo-stiker {
     max-width: 1120px;
     margin: 0 auto;
     position: relative;
+
+    @media screen and (max-width: 425px) {
+        max-width: 350px;
+    }
+}
+
+button {
+    background-color: transparent;
+}
+
+.load-more {
+    margin-top: 95px;
+    display: flex;
+    justify-content: center;
+
+    &-button {
+        @include button();
+
+        &:hover {
+            @include button-hover();
+        }
+    }
+
+    @media screen and (max-width: 425px) {
+        margin-top: 50px;
+    }
 }
 
