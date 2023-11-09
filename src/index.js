@@ -3,7 +3,7 @@ import './components/Slider';
 import Sidebar from './components/Sidebar';
 import BookCard from './components/BookCards';
 import Api from './components/Api';
-import {config} from './config';
+import {config} from './components/config';
 
 
 const api = new Api();

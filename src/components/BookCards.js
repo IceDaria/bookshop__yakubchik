@@ -7,13 +7,6 @@ const defaultCover = '../images/alt-book-cover.png';
 export default class BookCard {
     constructor (data, config) {
         this.data = data;
-        this.cover = data.volumeInfo.imageLinks?.thumbnail || defaultCover; // если обложка не пришла с сервера, ставим стандартную
-        this.authors = data.volumeInfo.authors;
-        this.title = data.volumeInfo.title;
-        this.rating = data.volumeInfo.averageRating;
-        this.ratingCount = data.volumeInfo.ratingsCount;
-        this.description = data.volumeInfo.description;
-        this.price = data.saleInfo.retailPrice;
         this.config = config;
         this.inCart = false;
         this.id = data.id;
@@ -27,34 +20,43 @@ export default class BookCard {
         this.checkLocalStorage()
     }
 
-// метод создания карточки в HTML 
+    // метод создания карточки в HTML 
     createCardElement() {
         // Создаем корневой элемент карточки книги
         this.cardElement = document.createElement('div');
         this.cardElement.classList.add('book-card');
+
+        this.createCoverImage();
+        this.createBookInfo();
+        this.createBuyButton();
+    }
       
-        // Создаем изображение обложки книги
+    // Создаем изображение обложки книги
+    createCoverImage() {
         const coverImage = document.createElement('img');
         coverImage.classList.add('book__cover');
         coverImage.alt = 'Bookcover';
-        coverImage.src = this.cover; // Устанавливаем URL обложки
+        // Устанавливаем URL обложки, если обложка не пришла с сервера, ставим стандартную
+        coverImage.src = this.data.volumeInfo.imageLinks?.thumbnail || defaultCover; 
         this.cardElement.appendChild(coverImage);
+    }
       
-        // Создаем контейнер для информации о книге
-        const bookInfo = document.createElement('div');
-        bookInfo.classList.add('book-info');
+    // Создаем контейнер для информации о книге
+    createBookInfo() {
+        this.bookInfo = document.createElement('div');
+        this.bookInfo.classList.add('book-info');
       
         // Добавляем информацию об авторе
         const authorInfo = document.createElement('div');
         authorInfo.classList.add('book__author');
-        authorInfo.textContent = this.authors?.join(', ');
-        bookInfo.appendChild(authorInfo);
+        authorInfo.textContent = this.data.volumeInfo.authors?.join(', ');
+        this.bookInfo.appendChild(authorInfo);
       
         // Добавляем название книги
         const titleInfo = document.createElement('div');
         titleInfo.classList.add('book__name');
-        titleInfo.textContent = this.title;
-        bookInfo.appendChild(titleInfo);
+        titleInfo.textContent = this.data.volumeInfo.title;
+        this.bookInfo.appendChild(titleInfo);
       
         // Добавляем рейтинг и отзывы
         const ratingInfo = document.createElement('div');
@@ -67,8 +69,7 @@ export default class BookCard {
         for (let i = 1; i <= 5; i++) {
           const starImage = document.createElement('img');
           starImage.classList.add('star-icon');
-          starImage.src = i <= Math.round(this.rating) ? starYellow : starWhite;
-          starImage.alt = i <= Math.round(this.rating) ? 'Star-yellow' : 'Star-white';
+          starImage.src = i <= Math.round(this.data.volumeInfo.averageRating) ? starYellow : starWhite;
           starsContainer.appendChild(starImage);
         }
       
@@ -77,40 +78,37 @@ export default class BookCard {
         // Добавляем информацию о рейтинге книги
         const reviewInfo = document.createElement('p');
         reviewInfo.classList.add('rating__review');
-        reviewInfo.textContent = this.ratingCount ? this.ratingCount + ' reviews' : 'no reviews yet';
+        reviewInfo.textContent = this.data.volumeInfo.ratingsCount? this.data.volumeInfo.ratingsCount + ' reviews' : 'no reviews yet';
         ratingInfo.appendChild(reviewInfo);
       
-        bookInfo.appendChild(ratingInfo);
+        this.bookInfo.appendChild(ratingInfo);
       
         // Добавляем описание книги
         const descriptionInfo = document.createElement('div');
         descriptionInfo.classList.add('book__discription');
-        descriptionInfo.textContent = this.description;
-        bookInfo.appendChild(descriptionInfo);
+        descriptionInfo.textContent = this.data.volumeInfo.description;
+        this.bookInfo.appendChild(descriptionInfo);
       
         // Добавляем цену книги
         const priceInfo = document.createElement('div');
         priceInfo.classList.add('book__price');
-        priceInfo.textContent = this.price ? `${this.price.amount} ${this.price.currencyCode}` : 'NOT FOR SALE';
-        bookInfo.appendChild(priceInfo);
+        priceInfo.textContent = this.data.saleInfo.retailPrice ? `${this.data.saleInfo.retailPrice.amount} ${this.data.saleInfo.retailPrice.currencyCode}` : 'NOT FOR SALE';
+        this.bookInfo.appendChild(priceInfo);
+    }
       
-        // Добавляем кнопку покупки
+    // Добавляем кнопку покупки
+    createBuyButton() {
         this.buyButton = document.createElement('button');
         this.buyButton.classList.add('buy__button');
-        bookInfo.appendChild(this.buyButton);
+        this.bookInfo.appendChild(this.buyButton);
       
-        this.cardElement.appendChild(bookInfo);
-      }
-
+        this.cardElement.appendChild(this.bookInfo);
+    }
+      
     // обновляем счетчик на значке корзины
     updateCartCounter() {
         this.cartCounter.textContent = this.config.cart;
-
-        if (+this.config.cart === 0 ){
-            this.cartCounter.style.display = 'none';
-        } else {
-            this.cartCounter.style.display = 'block';
-        }
+        this.cartCounter.style.display = this.config.cart === 0 ? 'none' : 'block';
     }
 
     // логика добавления книги в корзину
@@ -160,7 +158,7 @@ export default class BookCard {
             this.buyButton.classList.add('active');
         }
     }
-    //отрисовываем карточки книг
+    // отрисовываем карточки книг
     render() {
         this.buyButton.addEventListener('click', () => {
             this.addToCart();

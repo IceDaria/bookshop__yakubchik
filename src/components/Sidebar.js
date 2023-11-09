@@ -33,8 +33,6 @@ export default class Sidebar {
         activeSidebarItem.classList.remove('active');
 
         evt.target.parentNode.classList.add('active');
-
-        this.burgerMenu.classList.remove('active');
     }
 
     setLoadMoreButton(evt) {

@@ -1,16 +1,22 @@
 {
   "name": "bookshop",
   "version": "1.0.0",
-  "description": "",
+  "description": "A bookshop project on GoogleBooks Api",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack-dev-server --mode development"
+    "dev": "webpack-dev-server --mode development",
+    "build": "webpack --mode production"
+  },
+  "repository": {
+    "url": ""
   },
   "author": "Daria",
   "license": "ISC",
   "devDependencies": {
     "css-loader": "^6.8.1",
+    "css-minimizer-webpack-plugin": "^5.0.1",
+    "mini-css-extract-plugin": "^2.7.6",
     "node-sass": "^9.0.0",
     "sass-loader": "^13.3.2",
     "style-loader": "^3.3.3",
