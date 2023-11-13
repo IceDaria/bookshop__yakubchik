@@ -9,7 +9,7 @@
     "build": "webpack --mode production"
   },
   "repository": {
-    "url": ""
+    "url": "https://github.com/IceDaria/bookshop__yakubchik.git"
   },
   "author": "Daria",
   "license": "ISC",
