@@ -1,16 +1,17 @@
 // импортируем SVG для звёздочек и стандартную обложку в случае отсутствия таковой в ГуглБукс
-const starYellow = '../SVG/Star-yellow.svg';
-const starWhite = '../SVG/Star-white.svg';
-const defaultCover = '../images/alt-book-cover.png';
+import starYellow from '../SVG/star-yellow.svg';
+import starWhite from '../SVG/star-white.svg';
+import defaultCover from '../images/alt-book-cover.png';
 
 // создаём класс для карточек книг
 export default class BookCard {
     constructor (data, config) {
         this.data = data;
         this.config = config;
-        this.inCart = false;
+        this.inCart = false; // флаг, указывающий, добавлена ли книга в корзину
         this.id = data.id;
 
+        // загружаем данные о корзине и счетчик из локального хранилища
         this.storage = JSON.parse(localStorage.getItem('buyButton')) || [];
         this.cartCounter = document.querySelector('.cart__counter');
         this.cartCounter.textContent = localStorage.getItem('cart') || 0;
@@ -22,7 +23,7 @@ export default class BookCard {
 
     // метод создания карточки в HTML 
     createCardElement() {
-        // Создаем корневой элемент карточки книги
+        // создаем корневой элемент карточки книги
         this.cardElement = document.createElement('div');
         this.cardElement.classList.add('book-card');
 
@@ -31,41 +32,42 @@ export default class BookCard {
         this.createBuyButton();
     }
       
-    // Создаем изображение обложки книги
+    // создаем изображение обложки книги
     createCoverImage() {
         const coverImage = document.createElement('img');
         coverImage.classList.add('book__cover');
         coverImage.alt = 'Bookcover';
-        // Устанавливаем URL обложки, если обложка не пришла с сервера, ставим стандартную
+
+        // устанавливаем URL обложки, если обложка не пришла с сервера, ставим стандартную
         coverImage.src = this.data.volumeInfo.imageLinks?.thumbnail || defaultCover; 
         this.cardElement.appendChild(coverImage);
     }
       
-    // Создаем контейнер для информации о книге
+    // создаем контейнер для информации о книге
     createBookInfo() {
         this.bookInfo = document.createElement('div');
         this.bookInfo.classList.add('book-info');
       
-        // Добавляем информацию об авторе
+        // добавляем информацию об авторе
         const authorInfo = document.createElement('div');
         authorInfo.classList.add('book__author');
         authorInfo.textContent = this.data.volumeInfo.authors?.join(', ');
         this.bookInfo.appendChild(authorInfo);
       
-        // Добавляем название книги
+        // добавляем название книги
         const titleInfo = document.createElement('div');
         titleInfo.classList.add('book__name');
         titleInfo.textContent = this.data.volumeInfo.title;
         this.bookInfo.appendChild(titleInfo);
       
-        // Добавляем рейтинг и отзывы
+        // добавляем рейтинг и отзывы
         const ratingInfo = document.createElement('div');
         ratingInfo.classList.add('book__rating');
       
         const starsContainer = document.createElement('span');
         starsContainer.classList.add('rating__stars');
       
-        // Добавляем элементы звезд рейтинга
+        // добавляем элементы звезд рейтинга
         for (let i = 1; i <= 5; i++) {
           const starImage = document.createElement('img');
           starImage.classList.add('star-icon');
@@ -75,7 +77,7 @@ export default class BookCard {
       
         ratingInfo.appendChild(starsContainer);
 
-        // Добавляем информацию о рейтинге книги
+        // добавляем информацию о рейтинге книги
         const reviewInfo = document.createElement('p');
         reviewInfo.classList.add('rating__review');
         reviewInfo.textContent = this.data.volumeInfo.ratingsCount? this.data.volumeInfo.ratingsCount + ' reviews' : 'no reviews yet';
@@ -83,20 +85,20 @@ export default class BookCard {
       
         this.bookInfo.appendChild(ratingInfo);
       
-        // Добавляем описание книги
+        // добавляем описание книги
         const descriptionInfo = document.createElement('div');
         descriptionInfo.classList.add('book__discription');
         descriptionInfo.textContent = this.data.volumeInfo.description;
         this.bookInfo.appendChild(descriptionInfo);
       
-        // Добавляем цену книги
+        // добавляем цену книги
         const priceInfo = document.createElement('div');
         priceInfo.classList.add('book__price');
         priceInfo.textContent = this.data.saleInfo.retailPrice ? `${this.data.saleInfo.retailPrice.amount} ${this.data.saleInfo.retailPrice.currencyCode}` : 'NOT FOR SALE';
         this.bookInfo.appendChild(priceInfo);
     }
       
-    // Добавляем кнопку покупки
+    // добавляем кнопку покупки
     createBuyButton() {
         this.buyButton = document.createElement('button');
         this.buyButton.classList.add('buy__button');
@@ -115,7 +117,7 @@ export default class BookCard {
     addToCart() {
         this.buyButton.classList.toggle('active');
 
-        //меняем надпись на кнопке
+        // меняем надпись на кнопке
         if (!this.inCart) {
             this.buyButton.textContent = 'in the cart';
             this.config.cart++;
@@ -130,6 +132,7 @@ export default class BookCard {
         this.setLocalStorage();
     }
 
+    // сохраняем данные о карточке книги в локальном хранилище
     setLocalStorage() {
         this.storage = this.storage.filter(el => this.id !== el.id);
         this.storage.push({
@@ -149,7 +152,7 @@ export default class BookCard {
             this.inCart = bookData.inCart;
         }
     
-        if (this.price) {
+        if (this.data.saleInfo.retailPrice) {
             this.buyButton.textContent = this.inCart ? 'in the cart' : 'buy now';
             this.buyButton.classList.toggle('active', this.inCart);
         } else {
@@ -158,7 +161,7 @@ export default class BookCard {
             this.buyButton.classList.add('active');
         }
     }
-    // отрисовываем карточки книг
+    // отрисовываем карточки книг и добавляем обработчик клика на кнопку
     render() {
         this.buyButton.addEventListener('click', () => {
             this.addToCart();

@@ -1,13 +1,18 @@
+// импортируем картинки для слайдера
+import blackFriday from '../images/blackFriday.png';
+import top10 from '../images/top10.png';
+import checkOut from '../images/checkOut.png';
+
 // создаём массив с картинками для слайдера
 let images = [
     {
-        url: 'images/banner.png'
+        url: blackFriday,
     },
     {
-        url: 'images/banner2.png'
+        url: top10,
     },
     {
-        url: 'images/banner3.png'
+        url: checkOut,
     }
 ];
 
@@ -16,7 +21,7 @@ export class Slider {
         this.images = images;
         this.currentSlide = 0;
         this.intervalId = null;
-        this.autoSlideDelay = 55000; // задерка вопроизведения автопрокрутки после нажатия на точку
+        this.autoSlideDelay = 25000; // задерка вопроизведения автопрокрутки после нажатия на точку
     }
 
     initSlider() {
@@ -32,6 +37,7 @@ export class Slider {
         this.startAutoSlide();
     }
 
+    // код для баннеров в слайдере
     initImages(sliderImages) {
         this.images.forEach((image, index) => {
             let imageDiv = `<div class="image n${index} ${index === 0 ? "active" : ""}" style="background-image:url('${this.images[index].url}');" data-index="${index}"></div>`;
